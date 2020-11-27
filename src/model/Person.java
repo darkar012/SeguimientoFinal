@@ -33,7 +33,7 @@ public class Person implements Runnable{
 		color= app.color(r,g,b);
 		size = 7;
 		speedY = (int) (app.random(1, 5));
-		speedX = (int) (app.random(1, 5));
+		speedX = (int) (app.random(-3, 5));
 		dirXRandom = (int) (app.random(1,4));
 		
 	}
@@ -83,14 +83,13 @@ public class Person implements Runnable{
 	
 	public void run() {
 		
-			move();
-		
+			move();		
 		
 		if(infected) {
 
 			try {
 			
-			Thread.sleep(15000);
+			Thread.sleep(14000);
 			recovered = true;
 			healthy = false;
 			infected = false;

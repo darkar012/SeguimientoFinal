@@ -29,11 +29,9 @@ public class Main extends PApplet {
 		fill(222);
 		rect(250, 160, 700, 500);
 		control.draw();
-		Thread contagionThread = new Thread (logic);
-		contagionThread.start();
+		Thread reboundThread = new Thread (logic);
+		reboundThread.start();
 	}
-
-
 
 	public void keyPressed() {
 	}

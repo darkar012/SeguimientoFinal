@@ -3,6 +3,8 @@ package model;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
+import exceptions.Contagion;
+import exceptions.Thirty;
 import processing.core.PApplet;
 
 public class Logic implements Runnable {
@@ -10,6 +12,7 @@ public class Logic implements Runnable {
 	private ArrayList <Person> population;
 	private LinkedList <Counter> counterList;
 	private String[] people;
+	private boolean stop = true; 
 
 	public Logic (PApplet app) {
 		this.app = app;
@@ -18,7 +21,55 @@ public class Logic implements Runnable {
 		people = app.loadStrings("../data/people.txt");
 
 		readTXT();
+		createCounter();
 	}
+
+	private void createCounter () {
+		counterList.add(new Counter("Infectados:", 2, app));
+		counterList.add(new Counter("Sanos:", 1, app));
+		counterList.add(new Counter("Recuperados:", 3, app));
+	}
+
+	private void addCounter() {
+
+		int infected = 0;
+		int healthy = 0;
+		int recovered = 0;
+
+		for (int i = 0; i < population.size(); i++) {
+
+			if (population.get(i).isHealthy()) {
+				healthy++;
+			} else if (population.get(i).isInfected()) {
+				infected++;
+			} else {
+				recovered++;
+			}
+		}
+
+		float percentage= (infected*100/population.size()); 
+
+		if (percentage == 30) {
+			try {
+				throw new Thirty("Más del 30% infectado. Alerta");
+			} catch (Thirty e) {
+				System.out.println("Más del 30% infectado. Alerta");
+			}
+		}
+
+		for (int r = 0; r < counterList.size(); r++) {
+			if (counterList.get(r).getName().equals("Infectados:")) {
+				counterList.get(r).setQuantity(infected);
+			} else if (counterList.get(r).getName().equals("Sanos:")) {
+				counterList.get(r).setQuantity(healthy);
+			} else {
+				counterList.get(r).setQuantity(recovered);
+			}
+		}
+	}
+
+
+
 
 	private void readTXT() {
 		for (int i = 0; i < people.length; i++) {
@@ -48,20 +99,37 @@ public class Logic implements Runnable {
 			population.get(i).drawPerson();
 			Thread moveThread = new Thread (population.get(i));
 			moveThread.start();
-			
-			contagion();
+
+			if (population.get(i).isHealthy()==false) {
+				stop=true;
+			} else if (population.get(i).isHealthy()) {
+				stop = false;
+			}
+
+			if (stop == false) {
+				try {
+					contagion();
+				} catch (Contagion e) {
+					// TODO Auto-generated catch block
+					System.out.println("new infection");
+				}
+			}
 		}
+		for (int c = 0; c < counterList.size(); c++) {
+			counterList.get(c).drawCounter((c * 20) + 100);
+		}
+		addCounter();
 	}
 
 	public void  run() {
 		try {
-			Thread.sleep((int)(Math.random() * 100));
+			Thread.sleep((int)(1000));
 			rebound();
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 	}
 
 	public void rebound() {
@@ -78,30 +146,19 @@ public class Logic implements Runnable {
 
 					if (population.get(i)!= population.get(j)) {
 
-						//if(posX1 <= 250 && posX1 >= 250 + 676 && posY1 < 164 && posY1 <164 + 448 && posX2 <= 250 && posX2 >= 250 + 676 && posY2 < 164 && posY2 <164 + 448)
-
-						//population.get(i).setSpeedY(-1);
 						population.get(i).setSpeedX((int) app.random(-2, 2));
 						population.get(j).setSpeedX((int) app.random(-2, 2));
-						//population.get(j).setSpeedY(-1);
 
-						/*if (population.get(j).isHealthy() && population.get(i).isInfected()){
-
-							System.out.println("sio");
-							population.add(new InfectedPerson(true, false, false, app));
-							population.get(population.size()-1).setPosX(population.get(j).posX);
-							population.get(population.size()-1).setPosY(population.get(j).posY);
-							population.remove(population.get(j));
-
-						}*/
 					}
 				}
 			}
 		}
 	}
-	public void contagion() {
+
+	private void contagion() throws Contagion {
 		for (int i = 0; i < population.size(); i++) {
 			for (int j = 0; j < population.size(); j++) {
+
 				float percentage = (app.random(0, 10));
 				int posX1 = population.get(i).getPosX();
 				int posY1 = population.get(i).getPosY();
@@ -110,19 +167,20 @@ public class Logic implements Runnable {
 				int size = population.get(j).getSize();
 				boolean health = population.get(j).isHealthy();
 				boolean infect = population.get(i).isInfected();
-				
+
 				if (percentage <= 9 && app.dist(posX1, posY1, posX2, posY2) < size) {
 					if (health && infect) {
-						
+
 						population.add(new InfectedPerson(true, false, false, app));
 						population.get(population.size()-1).setPosX(population.get(j).posX);
 						population.get(population.size()-1).setPosY(population.get(j).posY);
 						population.remove(population.get(j));
-		
+
+						throw new Contagion("new infected");
+
 					}
-				}
+				} 
 			}
 		}
 	}
 }
-
