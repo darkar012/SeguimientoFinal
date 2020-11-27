@@ -17,4 +17,10 @@ public class ControlMain {
 	public void draw () {
 		logic.drawPopulation();
 	}
+	
+	public void sortList (char key) {
+		
+		logic.sortList(key);
+		
+	}
 }

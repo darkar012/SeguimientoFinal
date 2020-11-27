@@ -34,5 +34,8 @@ public class Main extends PApplet {
 	}
 
 	public void keyPressed() {
+		
+		control.sortList(key);
+		
 	}
 }

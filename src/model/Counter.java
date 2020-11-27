@@ -13,12 +13,12 @@ public class Counter implements Comparable<Counter> {
 	private int state;
 	private String name;
 	
-	public Counter(String name, int state, PApplet app) {
+	public Counter(String name, int state, int color, PApplet app) {
 		this.app = app;
 		this.name = name;
 		this.state = state;
 		quantity = 0;
-		color = app.color(r,g,b);
+		this.color = color;
 	}
 	
 	public void drawCounter (int posY) {
@@ -47,10 +47,13 @@ public class Counter implements Comparable<Counter> {
 		default:
 		}
 		app.text("Cantidad de personas "+ name + quantity, 200 , posY);
+		app.fill(0);
+		app.text("presione Q para ordenar por cantidad", 200 , 700);
+		app.text("presione C para ordenar por color", 200 , 720);
 	}
 	
 	public int compareTo(Counter o) {
-		return this.getColor()-o.getColor();
+		return this.getQuantity()-o.getQuantity();
 	}
 	
 

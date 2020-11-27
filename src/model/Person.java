@@ -13,7 +13,6 @@ public class Person implements Runnable{
 	protected int r;
 	protected int g;
 	protected int b;
-	protected int color;
 	protected float dirX;
 	protected float dirY;
 	protected boolean infected;
@@ -30,7 +29,6 @@ public class Person implements Runnable{
 		this.recovered = recovered;
 		posX=(int) (app.random(258, 942));
 		posY=(int) (app.random(172, 628));
-		color= app.color(r,g,b);
 		size = 7;
 		speedY = (int) (app.random(1, 5));
 		speedX = (int) (app.random(-3, 5));
@@ -181,14 +179,6 @@ public class Person implements Runnable{
 
 	public void setB(int b) {
 		this.b = b;
-	}
-
-	public int getColor() {
-		return color;
-	}
-
-	public void setColor(int color) {
-		this.color = color;
 	}
 
 	public float getDirX() {

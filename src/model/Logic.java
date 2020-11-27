@@ -1,6 +1,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 
 import exceptions.Contagion;
@@ -8,26 +9,31 @@ import exceptions.Thirty;
 import processing.core.PApplet;
 
 public class Logic implements Runnable {
+
 	private PApplet app;
 	private ArrayList <Person> population;
 	private LinkedList <Counter> counterList;
 	private String[] people;
 	private boolean stop = true; 
+	private ByColorComparator color;
 
 	public Logic (PApplet app) {
+
 		this.app = app;
 		population = new ArrayList <Person> ();
 		counterList = new LinkedList <Counter> ();
+		color= new ByColorComparator();
 		people = app.loadStrings("../data/people.txt");
 
 		readTXT();
 		createCounter();
+
 	}
 
 	private void createCounter () {
-		counterList.add(new Counter("Infectados:", 2, app));
-		counterList.add(new Counter("Sanos:", 1, app));
-		counterList.add(new Counter("Recuperados:", 3, app));
+		counterList.add(new Counter("Infectados:", 2, 1, app));
+		counterList.add(new Counter("Sanos:", 1, 2, app));
+		counterList.add(new Counter("Recuperados:", 3, 3, app));
 	}
 
 	private void addCounter() {
@@ -90,6 +96,14 @@ public class Logic implements Runnable {
 				population.add(new RecoveredPerson(false, false, true, app));
 				System.out.println("recuperada");
 			}
+		}
+	}
+
+	public void sortList(char key) {
+		if (key == 'q') {
+			Collections.sort(counterList);
+		} else if (key == 'c') {
+			Collections.sort(counterList, color);
 		}
 	}
 
