@@ -1,11 +1,13 @@
 package view;
 
 import controller.ControlMain;
+import model.Logic;
 import processing.core.PApplet;
 
 public class Main extends PApplet {
 
 	ControlMain control;
+	Logic logic;
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
@@ -19,9 +21,7 @@ public class Main extends PApplet {
 	public void setup() {
 
 		control = new ControlMain(this);
-
-
-
+		logic = new Logic(this);
 	}
 
 	public void draw() {
@@ -29,7 +29,8 @@ public class Main extends PApplet {
 		fill(222);
 		rect(250, 160, 700, 500);
 		control.draw();
-
+		Thread contagionThread = new Thread (logic);
+		contagionThread.start();
 	}
 
 

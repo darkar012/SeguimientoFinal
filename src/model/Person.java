@@ -27,6 +27,7 @@ public class Person implements Runnable{
 		this.app = app;
 		this.infected = infected;
 		this.healthy = healthy;
+		this.recovered = recovered;
 		posX=(int) (app.random(258, 942));
 		posY=(int) (app.random(172, 628));
 		color= app.color(r,g,b);
@@ -45,7 +46,7 @@ public class Person implements Runnable{
 			b = 255;	
 			app.fill(r,g,b);
 			app.ellipse(posX, posY, size, size);
-			System.out.println(posX);
+			
 		} else if (!healthy && infected && !recovered) {
 			r= 255;
 			g= 0;
@@ -81,7 +82,25 @@ public class Person implements Runnable{
 	}
 	
 	public void run() {
-		move();
+		
+			move();
+		
+		
+		if(infected) {
+
+			try {
+			
+			Thread.sleep(15000);
+			recovered = true;
+			healthy = false;
+			infected = false;
+			
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		
+		}
 	}
 
 	public PApplet getApp() {
