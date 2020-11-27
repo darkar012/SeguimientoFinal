@@ -83,14 +83,12 @@ public class Logic implements Runnable {
 
 			String type = divPopulation[0];
 			int peopleHealthy = Integer.parseInt(divPopulation[1]);
-			//int peopleInfected = Integer.parseInt(divPopulation[3]);
 
 			if (type.equals("sanas")) {
 				for (int j = 0; j < peopleHealthy; j++) {
 					population.add(new HealthyPerson(false, true, false, app));
 				}
 			} else if (type.equals("infectadas")) {
-				//for (int j = 0; j < peopleInfected; j++) {
 				population.add(new InfectedPerson(true, false, false, app));
 			} else if (type.equals("recuperadas")) {
 				population.add(new RecoveredPerson(false, false, true, app));
@@ -112,12 +110,19 @@ public class Logic implements Runnable {
 		for (int i = 0; i < population.size(); i++) {
 			population.get(i).drawPerson();
 			Thread moveThread = new Thread (population.get(i));
-			moveThread.start();
-
+				moveThread.start();
+			
+			if(population.get(i).getPosX()==300){
+			moveThread = null;
+			Runtime garbage = Runtime.getRuntime();
+			garbage.gc();
+			}
+			
 			if (population.get(i).isHealthy()==false) {
 				stop=true;
 			} else if (population.get(i).isHealthy()) {
 				stop = false;
+				
 			}
 
 			if (stop == false) {
@@ -133,6 +138,7 @@ public class Logic implements Runnable {
 			counterList.get(c).drawCounter((c * 20) + 100);
 		}
 		addCounter();
+		
 	}
 
 	public void  run() {
@@ -191,9 +197,10 @@ public class Logic implements Runnable {
 						population.remove(population.get(j));
 
 						throw new Contagion("new infected");
-
+						
 					}
 				} 
+				
 			}
 		}
 	}

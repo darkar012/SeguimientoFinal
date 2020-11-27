@@ -87,7 +87,7 @@ public class Person implements Runnable{
 
 			try {
 			
-			Thread.sleep(14000);
+			Thread.sleep(15000);
 			recovered = true;
 			healthy = false;
 			infected = false;
