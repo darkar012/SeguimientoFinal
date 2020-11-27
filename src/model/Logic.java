@@ -49,14 +49,14 @@ public class Logic implements Runnable {
 			Thread moveThread = new Thread (population.get(i));
 			moveThread.start();
 			
-			//contagion();
+			contagion();
 		}
 	}
 
 	public void  run() {
 		try {
-			Thread.sleep((int)(100));
-			contagion();
+			Thread.sleep((int)(Math.random() * 100));
+			rebound();
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -111,6 +111,9 @@ public class Logic implements Runnable {
 				boolean health = population.get(j).isHealthy();
 				boolean infect = population.get(i).isInfected();
 				
+				if (percentage <= 9 && app.dist(posX1, posY1, posX2, posY2) < size) {
+					if (health && infect) {
+						
 						population.add(new InfectedPerson(true, false, false, app));
 						population.get(population.size()-1).setPosX(population.get(j).posX);
 						population.get(population.size()-1).setPosY(population.get(j).posY);
@@ -119,7 +122,7 @@ public class Logic implements Runnable {
 					}
 				}
 			}
-		
-	
+		}
+	}
 }
 
