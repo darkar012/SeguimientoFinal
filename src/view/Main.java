@@ -26,8 +26,9 @@ public class Main extends PApplet {
 
 	public void draw() {
 		background(255);
+		fill(222);
+		rect(250, 160, 700, 500);
 		control.draw();
-
 
 	}
 
