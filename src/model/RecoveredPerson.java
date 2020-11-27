@@ -1,9 +1,11 @@
 package model;
 
-public class RecoveredPerson {
+import processing.core.PApplet;
 
-	public RecoveredPerson() {
-		// TODO Auto-generated constructor stub
+public class RecoveredPerson extends Person {
+
+	public RecoveredPerson(boolean infected, boolean healthy, boolean recovered, PApplet app) {
+		super (infected, healthy, recovered, app);
 	}
 
 }
